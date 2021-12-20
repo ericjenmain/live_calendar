@@ -9,18 +9,18 @@
     <h1>Live output</h1>
     <label for="calendar">Select Month</label>
     <select name="pickMo" id="pickMo">
-      <option value="1">January</option>
-      <option value="2">Feb</option>
-      <option value="3">mar</option>
-      <option value="4">april</option>
-      <option value="5">may</option>
-      <option value="6">jun</option>
-      <option value="7">July</option>
-      <option value="8">aug</option>
-      <option value="9">sept</option>
-      <option value="10">oct</option>
-      <option value="11">nov</option>
-      <option value="12">dec</option>
+      <option value="0">January</option>
+      <option value="1">Feb</option>
+      <option value="2">mar</option>
+      <option value="3">april</option>
+      <option value="4">may</option>
+      <option value="5">jun</option>
+      <option value="6">July</option>
+      <option value="7">aug</option>
+      <option value="8">sept</option>
+      <option value="9">oct</option>
+      <option value="10">nov</option>
+      <option value="11">dec</option>
     </select>
 
     <select name="pickDay" id="pickDay">
@@ -58,7 +58,8 @@
     </select>
 
     <select name="pickYr" id="pickYr">
-      <option value="	2021	">2021</option>
+      <option value="	2022	">2022</option>
+      <option value="	2021	" selected>2021</option>
       <option value="	2020	">2020</option>
       <option value="	2019	">2019</option>
       <option value="	2018	">2018</option>
@@ -114,52 +115,57 @@
   </style>
 
   <script>
-    let pickYr = document.getElementById("pickYr");
-    let pickMo = document.getElementById("pickMo");
-    let h2 = document.querySelector("h2");
-    let p1 = document.querySelector("p1");
-    let yrNow = new Date().getFullYear();
-    let moNow = new Date().getMonth();
+    let pickYr = document.getElementById("pickYr"); //store the year # from drop down
+    let pickMo = document.getElementById("pickMo"); //store the month # from drop down
+    let h2 = document.querySelector("h2"); //create and keep this h2 to display "Month yyyy" later
+    let p1 = document.querySelector("p1"); //create and keep this p1 to display the calendar
+    let yrNow = new Date().getFullYear(); //store value of current year
+    let moNow = new Date().getMonth(); //store value of current month
     let dNow = new Date().getDate();
 
-    setCalendar(yrNow, moNow, dNow);
+    setCalendar(yrNow, moNow, dNow); //create a calendar via function setCalendar with current year, current month, current date
 
-    pickYr.addEventListener("change", test);
-    function test() {
-      yrNow = pickYr.value;
+    pickYr.addEventListener("change", changeYr); //in case different year chosen from the drop down, change current year to chosen year, update calender by calling function
+    function changeYr() {
+      yrNow = Number(pickYr.value); //*****make sure to use "Number ()" to turn the string value into a number for later
       setCalendar(yrNow, moNow, dNow);
     }
 
-    pickMo.addEventListener("change", test1);
-    function test1() {
-      moNow = pickMo.value;
-      console.log(moNow);
+    pickMo.addEventListener("change", changeMo); //in case different month chosen from the drop down, change current month to chosen month, update calender by calling function
+    function changeMo() {
+      moNow = Number(pickMo.value); //*****make sure to use "Number ()" to turn the string value into a number for later
       setCalendar(yrNow, moNow, dNow);
     }
 
     function setCalendar(yr, mo, d) {
-      let dateString = new Date(yr, mo).toDateString();
-      let heading = dateString.slice(4, 8) + dateString.slice(10);
-
-      let firstDayOfMonth = new Date(yr, mo, 1).getDay();
-      let daysInThisMonth = new Date(yr, mo + 1, 0).getDate();
+      //main function to create the calendar
+      let dateString = new Date(yr, mo).toDateString(); // turn the current date or user-defined date into a date string so we can further process at the line below
+      let heading = dateString.slice(4, 8) + dateString.slice(10); // process the date string so it will only show Month and  yyyy
+      let firstDayOfMonth = new Date(yr, mo, 1).getDay(); //find the number representing the the day of the week (Mo=0,Tu=1..Su=6) at the 1st day of the moth
+      let daysInThisMonth = new Date(yr, mo + 1, 0).getDate(); //find how many days (28, 30, 31 etc) in the month of the given date
       let table =
-        "<table><tr><th>MO</th><th>TU</th><th>WE</th><th>TH</th><th>FR</th><th>SA</th><th>SU</th></tr>";
+        "<table><tr><th>MO</th><th>TU</th><th>WE</th><th>TH</th><th>FR</th><th>SA</th><th>SU</th></tr>"; //create a html-table with a row of headers, Mo, Tu...Su
 
       for (let i = 1; i <= dayOfWeek(firstDayOfMonth); i++) {
+        //fill days from last month with "/" until first day of current month
+        //call the "dayOfWeek function to find number of days from last month before the first day of this month"
         table += "<td>/</td>";
       }
 
       for (let i = 1; i <= daysInThisMonth; i++) {
+        //add day of the chosen month (28, 30, 31 days etc) to the calendar
         table += "<td>" + i + "</td>";
         if ((firstDayOfMonth + i - 1) % 7 == 0) {
+          //change row if
           table += "<tr></tr>";
         }
       }
 
-      table += "</table>";
-      h2.innerHTML = heading;
-      p1.innerHTML = table;
+      for (let i = )
+
+      table += "</table>"; // close the table
+      h2.innerHTML = heading; // assign the heading of Month and yyyy we created before to h2 text.
+      p1.innerHTML = table; // assign the completed table to p1 text.
     }
 
     function dayOfWeek(today) {
